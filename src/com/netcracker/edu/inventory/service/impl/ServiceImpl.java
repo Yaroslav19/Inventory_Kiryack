@@ -16,20 +16,21 @@ public class ServiceImpl implements Service {
                 }
             }
         }
-        // sort devices that have in(0), at place in front of null devices
+        // sort devices descendingly by in
         for (int i = devices.length-1; i >= 0 ; i--){
             for (int j = 0; j < i ; j++){
-                if(devices[j] != null && devices[j].getIn() == 0 && devices[j+1] == null){
+                if ( devices[j+1] != null && devices[j].getIn() < devices[j+1].getIn()) {
                     Device temp = devices[j];
                     devices[j] = devices[j+1];
                     devices[j+1] = temp;
                 }
             }
         }
+        //sort devices ascending without devices with in(0)
         for (int i = devices.length-1; i >= 0 ; i--){
             for (int j = 0; j < i ; j++){
-                if (devices[j] != null && devices[j+1] != null && devices[j].getIn() != 0 &&
-                        devices[j+1].getIn() != 0 && devices[j].getIn() > devices[j+1].getIn()) {
+                if ( devices[j+1] != null && devices[j+1].getIn() != 0
+                        && devices[j].getIn() > devices[j+1].getIn()) {
                     Device temp = devices[j];
                     devices[j] = devices[j+1];
                     devices[j+1] = temp;
@@ -41,11 +42,10 @@ public class ServiceImpl implements Service {
 
     @Override
     public void filtrateByType(Device[] devices, String type) {
-        for (Device device : devices){
-            if(device != null) {
-                if (!device.getType().equals(type)){
-                    device = null;
-                }
+        for (int i = 0; i < devices.length; i++){
+            if(devices[i] != null){
+                if(!devices[i].getType().equals(type))
+                    devices[i] = null;
             }
         }
     }
